@@ -11,6 +11,9 @@ app.use(bodyParser.json());
 
 app.post('/todos', (req,res) => {
   var text = req.body.text;
+  if (text === '') {
+    res.status(404).send();
+  }
   var newTodo = new Todo({
     text
   });
