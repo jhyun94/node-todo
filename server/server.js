@@ -3,10 +3,23 @@ var bodyParser = require('body-parser');
 
 var mongoose = require('./db/mongoose');
 var {Todo} = require('./models/todo');
-var {Todo} = require('./models/user');
+var {User} = require('./models/user');
 
 var app = express();
 
+app.use(bodyParser.json());
+
+app.post('/todos', (req,res) => {
+  var text = req.body.text;
+  var newTodo = new Todo({
+    text
+  });
+  newTodo.save().then((todo) => {
+    res.send({todo})
+  }).catch((e) => {
+    res.status(404);
+  })
+})
 app.listen(8000, () => {
   console.log('server is running');
 });
