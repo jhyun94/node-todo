@@ -11,18 +11,27 @@ app.use(bodyParser.json());
 
 app.post('/todos', (req,res) => {
   var text = req.body.text;
-  if (text === '') {
-    res.status(404).send();
-  }
+
   var newTodo = new Todo({
     text
   });
+
   newTodo.save().then((todo) => {
     res.send({todo})
   }).catch((e) => {
-    res.status(404);
+    res.status(400).send();
   })
 })
+
+app.get('/todos', (req,res) => {
+  Todo.find().then((todos) => {
+    res.send({todos});
+  }).catch((e) => {
+    res.status(400).send();
+  })
+})
+
+
 app.listen(8000, () => {
   console.log('server is running');
 });
