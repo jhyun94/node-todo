@@ -1,0 +1,11 @@
+{
+  "development": {
+    "PORT": 3000,
+    "JWT_SECRET": "djfknscak213",
+    "MONGODB_URI": "mongodb://localhost:27017/jonslist"
+  },
+  "test": {
+    "TEST": 3000,
+    "MONGODB_URI": "mongodb://localhost:27017/jonslist"
+  }
+}
