@@ -1,9 +1,12 @@
 require('./config/config');
-var express = require('express');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-var mongoose = require('./db/mongoose');
+const mongoose = require('./db/mongoose');
+var {User} = require('./models/user');
 
 var app = express();
+app.use(bodyParser.json());
 
 
 app.listen(process.env.PORT, () => {
