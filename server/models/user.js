@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var validator = require('validator');
 var bcrypt = require('bcryptjs');
+var _ = require('lodash');
 var Schema = mongoose.Schema;
 
 
@@ -8,8 +9,8 @@ UserSchema = new Schema({
   email: {
     type: String,
     required: true,
-    trim: true,
     unique: true,
+    trim: true,
     validate: {
       validator: (value) => {
         return validator.isEmail(value);
@@ -46,8 +47,16 @@ UserSchema.pre('save', function(next) {
   } else {
     next();
   }
-  
 })
+
+UserSchema.methods.toJSON = function() {
+  var user = this;
+  var userObject = user.toObject();
+
+  return _.pick(userObject, ['_id', 'email']);
+}
+
+
 
 var User = mongoose.model('User', UserSchema);
 
