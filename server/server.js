@@ -73,7 +73,7 @@ app.patch('/todos/:id', (req, res) => {
   })
 
 })
-
+//delete a todo
 app.delete('/todos/:id', (req,res) => {
   var id = req.params.id;
 
@@ -87,9 +87,15 @@ app.delete('/todos/:id', (req,res) => {
   })
 })
 
+// create a user
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+  res.send(body);
+})
+
 
 
 app.listen(port || 8000, () => {
-  console.log('server is running');
+  console.log('server is running on port ');
 });
 
