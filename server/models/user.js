@@ -32,7 +32,7 @@ UserSchema = new Schema({
   }]
 })
 
-var User = mongoose.model('Tank', UserSchema);
+var User = mongoose.model('User', UserSchema);
 
 module.exports = {
   User
