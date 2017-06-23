@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var validator = require('validator');
+var bcrypt = require('bcryptjs');
 var Schema = mongoose.Schema;
 
 
@@ -30,6 +31,22 @@ UserSchema = new Schema({
       required: true
     }
   }]
+})
+
+UserSchema.pre('save', function(next) {
+  var user = this;
+
+  if (user.isModified('password')) {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(user.password, salt , (err, res) => {
+        user.password = res;
+        next();
+      })
+    })
+  } else {
+    next();
+  }
+  
 })
 
 var User = mongoose.model('User', UserSchema);
