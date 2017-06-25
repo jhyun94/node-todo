@@ -6,11 +6,12 @@ const {authenticate} = require('./middleware/authenticate');
 
 
 const mongoose = require('./db/mongoose');
-var {User} = require('./models/user');
+const {User} = require('./models/user');
+const {Todo} = require('./models/todo');
 
 var app = express();
 app.use(bodyParser.json());
-
+//create users
 app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   var user = new User(body);
@@ -22,11 +23,11 @@ app.post('/users', (req, res) => {
     res.status(400).send(e);
   })
 })
-
+//users dashboard
 app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
 })
-
+//users login
 app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   User.findByCredentials(body.email, body.password).then((user) => {
@@ -37,7 +38,7 @@ app.post('/users/login', (req, res) => {
     res.status(401).send(e);
   })
 })
-
+//logout a user
 app.delete('/users/me/token', authenticate, (req, res) => {
   req.user.removeToken(req.token).then((user) => {
     res.send();
@@ -45,7 +46,25 @@ app.delete('/users/me/token', authenticate, (req, res) => {
     res.status(401).send();
   })
 })
+//create a todo
+app.post('/todos', authenticate, (req, res) => {
+  var body = _.pick(req.body, ['text']);
+  var todo = new Todo({text: body.text, _creator: req.user._id});
 
+  todo.save().then((todo) => {
+    res.send(todo);
+  }).catch((e) => {
+    res.status(400).send();
+  })
+})
+
+app.get('/todos', authenticate, (req,res) => {
+  Todo.find({_creator: req.user._id}).then((todo) => {
+    res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
+  })
+})
 app.listen(process.env.PORT, () => {
   console.log('server is running on port ', process.env.PORT);
 })
