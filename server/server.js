@@ -57,10 +57,20 @@ app.post('/todos', authenticate, (req, res) => {
     res.status(400).send();
   })
 })
-
+//get all todos for that user
 app.get('/todos', authenticate, (req,res) => {
   Todo.find({_creator: req.user._id}).then((todo) => {
     res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
+  })
+})
+//get one todo for that user
+app.get('/todos/:id', authenticate, (req, res) => {
+  var id = req.params.id;
+
+  Todo.findOne({_id: id, _creator: req.user._id}).then((todo) => {
+    res.send({todo})
   }).catch((e) => {
     res.status(400).send();
   })
