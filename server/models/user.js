@@ -49,7 +49,22 @@ UserSchema.pre('save', function(next) {
     next();
   }
 })
+UserSchema.statics.findByToken = function(token) {
+  var User = this;
+  var decoded;
 
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch(e) {
+    return new Promise.reject();
+  }
+
+   return User.findOne({
+    _id: decoded.id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
+  })
+}
 UserSchema.methods.toJSON = function() {
   var user = this;
   var userObject = user.toObject();

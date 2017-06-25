@@ -24,7 +24,7 @@ app.post('/users', (req, res) => {
 })
 
 app.get('/users/me', authenticate, (req, res) => {
-  res.send()
+  res.send(req.user);
 })
 
 app.listen(process.env.PORT, () => {
