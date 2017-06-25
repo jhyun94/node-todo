@@ -38,6 +38,14 @@ app.post('/users/login', (req, res) => {
   })
 })
 
+app.delete('/users/me/token', authenticate, (req, res) => {
+  req.user.removeToken(req.token).then((user) => {
+    res.send();
+  }).catch((e) => {
+    res.status(401).send();
+  })
+})
+
 app.listen(process.env.PORT, () => {
   console.log('server is running on port ', process.env.PORT);
 })
