@@ -75,6 +75,20 @@ app.get('/todos/:id', authenticate, (req, res) => {
     res.status(400).send();
   })
 })
+
+app.patch('/todos/:id', authenticate, (req, res) => {
+  var id = req.params.id;
+  var text = req.body.text;
+  Todo.findOneAndUpdate({_id: id, _creator: req.user._id}, {
+    $set: {
+      text
+    }
+  }, {new: true}).then((todo) => {
+    res.send({todo})
+  }).catch((e) => {
+    res.status(400).send();
+  })
+})
 app.listen(process.env.PORT, () => {
   console.log('server is running on port ', process.env.PORT);
 })
