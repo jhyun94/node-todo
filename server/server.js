@@ -2,6 +2,7 @@ require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
+const {authenticate} = require('./middleware/authenticate');
 
 
 const mongoose = require('./db/mongoose');
@@ -21,6 +22,11 @@ app.post('/users', (req, res) => {
     res.status(400).send(e);
   })
 })
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send()
+})
+
 app.listen(process.env.PORT, () => {
   console.log('server is running on port ', process.env.PORT);
 })
