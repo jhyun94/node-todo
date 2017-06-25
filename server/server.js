@@ -75,7 +75,7 @@ app.get('/todos/:id', authenticate, (req, res) => {
     res.status(400).send();
   })
 })
-
+//update a todo for that user
 app.patch('/todos/:id', authenticate, (req, res) => {
   var id = req.params.id;
   var text = req.body.text;
@@ -85,6 +85,15 @@ app.patch('/todos/:id', authenticate, (req, res) => {
     }
   }, {new: true}).then((todo) => {
     res.send({todo})
+  }).catch((e) => {
+    res.status(400).send();
+  })
+})
+//delete a todo for that user
+app.delete('/todos/:id', authenticate, (req, res) => {
+  var id = req.params.id;
+  Todo.findOneAndRemove({_id: id, _creator: req.user._id}).then((todo) => {
+    res.send();
   }).catch((e) => {
     res.status(400).send();
   })
