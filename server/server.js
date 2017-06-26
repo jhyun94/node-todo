@@ -78,16 +78,21 @@ app.get('/todos/:id', authenticate, (req, res) => {
 //update a todo for that user
 app.patch('/todos/:id', authenticate, (req, res) => {
   var id = req.params.id;
-  var text = req.body.text;
-  Todo.findOneAndUpdate({_id: id, _creator: req.user._id}, {
-    $set: {
-      text
-    }
-  }, {new: true}).then((todo) => {
+  var body = _.pick(req.body, ['text', 'completed']);
+
+  if (body.completed === true) {
+    body.completedAt = new Date().getTime();
+  } else {
+    body.completedAt = null;
+    body.completed = false;
+  }
+
+  Todo.findOneAndUpdate({_id: id, _creator: req.user._id}, {$set: body}, {new: true}).then((todo) => {
     res.send({todo})
   }).catch((e) => {
     res.status(400).send();
   })
+
 })
 //delete a todo for that user
 app.delete('/todos/:id', authenticate, (req, res) => {
