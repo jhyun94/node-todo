@@ -5,6 +5,13 @@ var TodoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  completed: {
+    default: false,
+    type: Boolean,
+  },
+  completedAt: {
+    type: Number
+  },
   _creator: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
